@@ -23,8 +23,7 @@ public class file_handling {
             InputFileData.SetInitiatorType(transaction[2]);
             InputFileData.SetDateTime(transaction[3]);
             InputFileData.SetTransactionValue(Float.parseFloat(transaction[4]));
-            
-           
+              
             }  
         } catch(FileNotFoundException e) {
             System.out.print("File " + fileName + " does not exist");
@@ -33,7 +32,6 @@ public class file_handling {
         }  
         return InputFileData; 
     }
-
     public void writeFile(transaction_data debtData) {
         BufferedWriter bw = null;
         outputData = debtData;
