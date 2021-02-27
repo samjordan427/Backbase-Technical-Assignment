@@ -4,65 +4,71 @@ import java.io.IOException;
 import java.io.*;
 
 public class file_handling {
-    
-    public void readFile(String fileName)  throws IOException {
+    transaction_data outputData;
+    public transaction_data readFile(String fileName)  throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line = "";  
         String splitBy = ",";
-        Float savingsBalance = 0.00f;
-        Float currentBalance = 0.00f; 
-        Integer savingsAccountId = 0;
-        Integer currentAccountId = 0;
-        Integer lineNumber = 0;
-        debt_manager transfer = new debt_manager();
-        transaction_data data = new transaction_data();
+        String headerLine = "";
+        transaction_data InputFileData = new transaction_data();
+        
         try{
+            headerLine = br.readLine();
             while ((line = br.readLine()) != null)  
             {  
             String[] transaction = line.split(splitBy); 
             
-            String accountType = transaction[1];
+            InputFileData.SetAccountID(Integer.parseInt(transaction[0]));
+            InputFileData.SetAccountType(transaction[1]);
+            InputFileData.SetInitiatorType(transaction[2]);
+            InputFileData.SetDateTime(transaction[3]);
+            InputFileData.SetTransactionValue(Float.parseFloat(transaction[4]));
             
-           // System.out.println(transaction[0] + " " + transaction[1]);
-            Float transactionValue = Float.parseFloat(transaction[4]);
-            //System.out.println(transactionValue);
-            if (accountType.contains("SAVINGS")) {
-                data.SetAccountID(Integer.parseInt(transaction[0]), lineNumber);
-                savingsBalance = Float.sum(savingsBalance, transactionValue);
-                //System.out.println(savingsBalance);
-            } else if(accountType.contains("CURRENT")) {
-                currentAccountId = Integer.parseInt(transaction[0]);
-                if (transactionValue < 0) {
-                    currentBalance = currentBalance + transactionValue;
-                    if (currentBalance < 0) {
-                
-                        Boolean success = transfer.transferMoney(savingsBalance, currentBalance, transactionValue, currentAccountId, savingsAccountId, fileName);
-                        if (success == true) {
-                            
-                            savingsBalance = savingsBalance + currentBalance;
-                            //System.out.print(savingsBalance);
-                        } else if(success == false) {
-                            //System.out.print("ah nuuu");
-                        }
-                    }
-                } else {
-                  currentBalance = Float.sum(currentBalance, transactionValue);
-                }
-            }
-            lineNumber++;
+           
             }  
-            
         } catch(FileNotFoundException e) {
             System.out.print("File " + fileName + " does not exist");
         } finally {
             br.close();
+        }  
+        return InputFileData; 
+    }
+
+    public void writeFile(transaction_data debtData) {
+        BufferedWriter bw = null;
+        outputData = debtData;
+        String fileName = outputData.GetFileName();
+        String newTransaction;
+        Integer lineNumber = 0;
+        String newLine = System.getProperty("line.separator");
+        try {
+            File file = new File(fileName);
+
+            if (!file.exists()) {
+                System.out.println("File " + fileName + " does not exist");
+            }
+
+            FileWriter fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            bw.write("AccountID,AccountType,InitiatorType,DateTime,TransactionValue " + newLine);
+            while (lineNumber < outputData.GetNumberOfRecords()) {
+                System.out.println(lineNumber + "  " +outputData.GetNumberOfRecords());
+                newTransaction = String.valueOf(outputData.GetAccountID(lineNumber) + "," + outputData.GetAccountType(lineNumber) + "," + outputData.GetInitiatorType(lineNumber) + "," + outputData.GetDateTime(lineNumber) + "," +outputData.GetTransactionValue(lineNumber) + newLine );
+                bw.write(newTransaction);
+                System.out.println(newTransaction);
+                lineNumber++;
+            }
+            System.out.println(outputData.GetFileName());
+        
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        } finally {
+            try{
+            if(bw!=null)
+           bw.close();
+         }catch(Exception ex){
+             System.out.println("Error in closing the BufferedWriter"+ex);
+          }
         }
-        System.out.println(savingsBalance + " " + currentBalance);
-        
-    }
-
-    public void writeFile( Integer AccountId, String AccountType, String DateTime ,Float transactionValue, String fileName) {
-        
-    }
+    }   
 }
-
