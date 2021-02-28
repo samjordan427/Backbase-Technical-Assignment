@@ -24,5 +24,5 @@ Additional files:
 - There are two diagrams labelled "Sequence Diagram.pdf" and "transferring money flowchart.pdf" within the GitHub repository
 
 Included test files (in the Git repos):
-customer-1234567-ledger.csv
-customer-24680-ledger.csv
+customer-1234567-ledger.csv which tests the program against the given example file
+customer-24680-ledger.csv which tests the program to see if it can handle when the savings cannot cover the overdraft
