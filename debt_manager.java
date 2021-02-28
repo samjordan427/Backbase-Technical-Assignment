@@ -1,4 +1,4 @@
-
+import java.text.DecimalFormat;
 public class debt_manager {
     
 
@@ -14,13 +14,15 @@ public class debt_manager {
     transaction_data debtData;
     notification notify = new notification();
 
+    private static DecimalFormat df = new DecimalFormat("0.00");
+
     public Boolean transferMoney(Float transactionValue, Float currentBalance, Float savingsBalance) {
         //at this point we know that they are in their overdraft, so can we offset the overdraft from the savings account
         //this makes the current balance positive so that we know how much the savings account has to transfer to the current account to clear the overdraft
         debt = Math.abs(currentBalance);
         if(savingsBalance >= debt) {
             //this calls the notification service
-            notify.generateNotification("that money of the amount " + debt + " has been transferred from savings");
+            notify.generateNotification("that money of the amount " + df.format(debt) + " has been transferred from savings");
             //setting the values for savings account statement
             debtData.SetAccountID(savingsAccountID);
             debtData.SetAccountType("SAVINGS");
@@ -44,7 +46,7 @@ public class debt_manager {
             
         } else {
             //if there is not enough money in the savings to cover the overdraft, the remaining amount of savings is transferred to minimise the overdraft as much as possible
-            notify.generateNotification("that there was not enough money in savings to transfer " + debt);
+            notify.generateNotification("that there was not enough money in savings to transfer " + df.format(debt) + " so " + savingsBalance + " has been transferred from savings to current account");
             //setting the values for savings account statement
             debtData.SetAccountID(savingsAccountID);
             debtData.SetAccountType("SAVINGS");
