@@ -1,7 +1,7 @@
 The Github link for the repository is: https://github.com/samjordan427/Backbase-Technical-Assignment
 
 How to run the application:
-1. Unzip the 'Money Saver Application'
+1. Open the 'Money Saver Application' folder
 2. If on windows run .bat file and if on linux/MacOS run .sh file
 3. When prompted, enter '1' which will take you to the read file option
 4. Enter the file path of the ledger you wish to read (the file path is not neccessary if the ledger is located in the same folder as the application)
