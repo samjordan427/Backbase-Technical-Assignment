@@ -10,12 +10,13 @@ public class file_handling {
         BufferedReader br = new BufferedReader(new FileReader(fileName));
         String line = "";  
         String splitBy = ",";
+        //this is an unused variable that skips over the first line in the csv
         String headerLine = "";
         transaction_data InputFileData = new transaction_data();
 
         //this try catch is in case there is an issue reading in the given file name
         try{
-            //this is an unused variable that skips over the first line in the csv
+            //This variable consumes  first line (header) in the csv
             headerLine = br.readLine();
 
             while ((line = br.readLine()) != null)  {
